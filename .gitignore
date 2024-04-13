@@ -1,0 +1,15 @@
+# IDEs
+.idea
+
+# misc
+.DS_Store
+*.pem
+
+# logs
+*.log
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
