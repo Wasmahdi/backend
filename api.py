@@ -7,6 +7,7 @@ from langchain_openai import ChatOpenAI
 from fastapi.responses import JSONResponse
 from langchain_openai import OpenAIEmbeddings
 from fastapi import FastAPI, Header
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from langchain.chains.question_answering import load_qa_chain
 
@@ -53,6 +54,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 def validate_api_key(x_author:str):
     if x_author == backend_key:
