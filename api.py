@@ -173,3 +173,8 @@ async def modify_chatbot_settings(payload:ChatbotSettingsPayload,x_author: str =
         WIDGET_BUTTON_URL = payload.WIDGET_BUTTON_URL
 
     return JSONResponse(content={'success':True,'message':'changes saved!'},status_code=200)
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
