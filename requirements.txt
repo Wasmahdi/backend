@@ -3,7 +3,7 @@ faiss-cpu
 uvicorn
 langchain
 langchain-community
-langchain-openai
+langchain_openai
 python-dotenv
 pydantic
 tiktoken
