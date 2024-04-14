@@ -8,8 +8,8 @@
 # logs
 *.log
 
-# local env files
-.env*.local
+#env files
+.env
 
 # vercel
 .vercel
