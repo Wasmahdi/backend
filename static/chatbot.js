@@ -1,5 +1,5 @@
 (function() {
-    const backend_url = 'http://localhost:8000';
+    const backend_url = 'https://backend-wgh5.vercel.app';
     const backend_token = '7yr82hwerwehfbwy94rkjbwef975b32497897243hbsbjkdshbqhwoiuqerbhf';
 
     fetch(`${backend_url}/v1/chatbot/settings`, {
