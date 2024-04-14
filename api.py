@@ -66,7 +66,7 @@ def validate_api_key(x_author:str):
 @app.post("/v1/chatbot/chat")
 async def chat_with_chatbot(payload:ChatPayload,x_author: str = Header(None)):
     # Validation of API key for the security purpose (You can say it as a password to protect the backend from being exposed)
-    if x_author == None:
+    if x_author is None:
         return JSONResponse(content={'success':False,'error':'API key is missing'},status_code=401)
     elif not validate_api_key(x_author):
         return JSONResponse(content={'success':False,'error':'Invalid or expired api key!'},status_code=401)
@@ -81,7 +81,11 @@ async def chat_with_chatbot(payload:ChatPayload,x_author: str = Header(None)):
         embeddings = OpenAIEmbeddings()
         persist_directory = f'trained_db/chatbot'
         #Loading our VectorDatabase
-        Vectordb = FAISS.load_local(persist_directory,embeddings)
+        vectordb = FAISS.load_local(
+            persist_directory,
+            embeddings,
+            allow_dangerous_deserialization = True
+        )
         #here is where the actual prompt template is intialize.
         _PROMPT = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
         #Intializing our LLM.
@@ -93,7 +97,7 @@ async def chat_with_chatbot(payload:ChatPayload,x_author: str = Header(None)):
         #The load_qa_chain function is used to load a question answering chain in LangChain. It is responsible for creating a chain that can be used for question answering. 
         chain = load_qa_chain(llm=llm, chain_type="stuff", prompt=_PROMPT)
         #This is retriver that is responsible for handeling our VectorDB queries.
-        retriever = Vectordb.as_retriever(search_type="mmr")
+        retriever = vectordb.as_retriever(search_type="mmr")
         #We will get relevant documents on the basis of the query.
         docs = retriever.get_relevant_documents(payload.query)
         # print(docs[0].metadata['source'])
@@ -136,7 +140,7 @@ async def retrive_chatbot_settings(x_author: str = Header(...)):
 @app.put("/v1/chatbot/settings")
 async def modify_chatbot_settings(payload:ChatbotSettingsPayload,x_author: str = Header(None)):
     # Validation of API key for the security purpose (You can say it as a password to protect the backend from being exposed)
-    if x_author == None:
+    if x_author is None:
         return JSONResponse(content={'success':False,'error':'API key is missing'},status_code=401)
     elif not validate_api_key(x_author):
         return JSONResponse(content={'success':False,'error':'Invalid or expired api key!'},status_code=401)
@@ -173,8 +177,3 @@ async def modify_chatbot_settings(payload:ChatbotSettingsPayload,x_author: str =
         WIDGET_BUTTON_URL = payload.WIDGET_BUTTON_URL
 
     return JSONResponse(content={'success':True,'message':'changes saved!'},status_code=200)
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)

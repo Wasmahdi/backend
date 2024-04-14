@@ -1,4 +1,5 @@
 fastapi
+faiss-cpu
 uvicorn
 langchain
 langchain-community
