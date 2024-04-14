@@ -1,9 +1,8 @@
 fastapi
 faiss-cpu
-uvicorn
 langchain
 langchain-community
-langchain_openai
+langchain-openai
 python-dotenv
 pydantic
 tiktoken
